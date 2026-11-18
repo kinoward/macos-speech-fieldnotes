@@ -1,4 +1,4 @@
-<h1 align="center">macOS Speech Field Notes</h1>
+<h1 align="center">On-Device Speech Recognition on macOS</h1>
 
 <p align="center"><strong>Engineering field notes · Two minimal demos · Reproducible experiments</strong><br>
 One on-device Mandarin recognizer powers both video subtitles and live Mandarin-to-English translation.</p>
