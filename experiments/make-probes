@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+if [[ $# != 1 ]]; then echo 'Usage: experiments/make-probes NEW_DIRECTORY' >&2; exit 2; fi
+directory=$1
+mkdir "$directory"
+job=$(mktemp -d "$directory/.voice.XXXXXX")
+trap 'rm -rf "$job"' EXIT
+voice="${VOICE:-Tingting}"
+speak() {
+  say -v "$voice" -r 170 -o "$job/$1.aiff" "$2"
+  ffmpeg -hide_banner -loglevel error -nostdin -i "$job/$1.aiff" -af 'apad=pad_dur=0.3' \
+    -ar 16000 -ac 1 -c:a pcm_s16le "$directory/$1.wav"
+}
+speak negation '我没有说要[[slnc 700]]关掉走廊的灯。'
+speak condition '如果窗户开着[[slnc 620]]我们就能听见雨声。'
+speak noun '请记下天空中[[slnc 430]]的第一颗星星。'
+speak independent '晚霞已经消失[[slnc 500]]街灯刚刚亮起。'
+ffmpeg -v error -nostdin -i "$directory/condition.wav" -af volume=-24dB "$directory/quiet.wav"
+ffmpeg -v error -nostdin -i "$directory/condition.wav" \
+  -f lavfi -i 'anoisesrc=color=pink:amplitude=0.012:sample_rate=16000:seed=42' \
+  -filter_complex '[0:a][1:a]amix=inputs=2:duration=first:normalize=0' "$directory/noise.wav"
+ffmpeg -v error -nostdin -f lavfi -i 'anullsrc=r=16000:cl=mono' -t 3 "$directory/silence.wav"
