@@ -111,8 +111,6 @@ In the synthetic sample, the recognizer heard **望远镜** (“telescope”) as
   <a href="https://github.com/kinoward"><img src="https://github.com/kinoward.png?size=96" width="48" height="48" alt=""><br><strong>Kino Ward (@kinoward)</strong></a>
 </p>
 
-Kino built the video captioning and live translation demos, designed the audio replays used to test Mandarin sentence breaks, and wrote the English and Chinese field notes. The experiment log shows how those replays exposed pauses that changed the meaning of the English translation. [Experiment log](docs/en/experiments.md) · [Contributors on GitHub](https://github.com/kinoward/macos-speech-fieldnotes/graphs/contributors)
-
 ## Reading the commit history
 
 Read the commits in chronological order to trace the work from file transcription through video captioning, live translation and sentence segmentation. The history follows Conventional Commits 1.0.0, with one logical change per commit. For example, `fix(live): keep timed commas with their preceding clause` records a specific segmentation decision. The commit body explains the reason for the change and how it was checked. [Commit specification](https://www.conventionalcommits.org/en/v1.0.0/) · [Project history](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
