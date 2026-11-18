@@ -386,7 +386,8 @@ private actor Captions {
                 continue
             }
             guard token.start <= boundary + 0.40 else { return nil }
-            if token.text.allSatisfy({ "。！？!?;；，,”’」』》〉】〕".contains($0) }) {
+            let symbol = token.text.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !symbol.isEmpty && symbol.allSatisfy({ "。！？!?;；，,”’」』》〉】〕".contains($0) }) {
                 return nextOffset
             }
             return offset
