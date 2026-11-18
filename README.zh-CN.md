@@ -79,8 +79,12 @@ python -m pip install -r demos/video-captions/requirements.txt
 
 在合成样例中，识别器把“望远镜”听成了“望远近”，英文预览也继承了这个错误。视频用户可以只改一条字幕，从原片重新烧录。实时客户端则需要在原文被修订时替换旧译文。实验手册给出了观察这两种行为的方法，也说明了预览延迟和定稿时间应怎样分别测量。[实验记录](docs/zh-CN/experiments.md)
 
-原创代码、笔记与静音插图使用 [MIT 许可](LICENSE)。示例音频在使用者本机生成。模型、系统音色和字体由各自的提供方供应。[数据流与素材说明](docs/zh-CN/architecture.md#数据与素材)
-
 ## 如何阅读提交历史
 
 按时间顺序阅读提交，可以看到实验怎样从文件识别发展到视频字幕、实时翻译和断句。提交历史遵循 Conventional Commits 1.0.0，每次提交聚焦一项改动。例如，`fix(live): keep timed commas with their preceding clause` 记录了逗号应归入前一分句的决定，提交正文说明了原因和验证方法。[提交规范](https://www.conventionalcommits.org/zh-hans/v1.0.0/) · [项目提交历史](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
+
+## 开源协议
+
+本仓库的原创代码、技术笔记和无声插图采用 **MIT 许可证**。你可以使用、修改和再分发这些内容，也可以商用。复制全部或实质性部分时，须保留版权声明和许可声明。这些材料按原样提供，不附带任何担保。[许可证全文](LICENSE)
+
+示例音频在本机生成。模型资源、系统音色、字体与第三方依赖各自适用其许可条款。[数据与素材说明](docs/zh-CN/architecture.md#数据与素材)
