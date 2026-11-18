@@ -12,7 +12,15 @@ One on-device Mandarin recognizer powers both video subtitles and live Mandarin-
   <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars&amp;labelColor=293747&amp;color=1679A3" height="23" alt="GitHub star count"></a>
 </p>
 
-<p align="center"><code>macOS</code> <code>Apple silicon</code> <code>Swift</code> <code>on-device ASR</code> <code>video subtitles</code> <code>streaming translation</code></p>
+<p align="center">
+  <a href="docs/en/experiments.md"><img src="https://img.shields.io/badge/Project-Field%20notes-7556B3?style=flat&amp;labelColor=293747" height="23" alt="Project · Field notes"></a>
+  <a href="docs/en/architecture.md"><img src="https://img.shields.io/badge/macOS-Apple%20silicon-226794?style=flat&amp;labelColor=293747&amp;logo=apple&amp;logoColor=white" height="23" alt="macOS · Apple silicon"></a>
+  <a href="docs/en/architecture.md"><img src="https://img.shields.io/badge/Swift-Apple%20Speech-B34829?style=flat&amp;labelColor=293747&amp;logo=swift&amp;logoColor=white" height="23" alt="Swift · Apple Speech"></a>
+  <br>
+  <a href="docs/en/architecture.md"><img src="https://img.shields.io/badge/ASR-On--device%20speech-246A86?style=flat&amp;labelColor=293747" height="23" alt="ASR · On-device speech"></a>
+  <a href="docs/en/video-captions.md"><img src="https://img.shields.io/badge/Captions-FFmpeg%20%2B%20H.265-985720?style=flat&amp;labelColor=293747&amp;logo=ffmpeg&amp;logoColor=white" height="23" alt="Captions · FFmpeg + H.265"></a>
+  <a href="docs/en/live-translation.md"><img src="https://img.shields.io/badge/Live%20translation-ZH%20%E2%86%92%20EN-167061?style=flat&amp;labelColor=293747&amp;logo=nodedotjs&amp;logoColor=white" height="23" alt="Live translation · ZH → EN"></a>
+</p>
 
 <p align="center">
   <a href="#how-audio-becomes-captions">Architecture &amp; stack</a> ·

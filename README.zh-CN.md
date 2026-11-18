@@ -12,7 +12,15 @@
   <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars&amp;labelColor=293747&amp;color=1679A3" height="23" alt="GitHub Star 数量"></a>
 </p>
 
-<p align="center"><code>macOS</code> <code>Apple silicon</code> <code>Swift</code> <code>端侧语音识别</code> <code>视频字幕</code> <code>流式翻译</code></p>
+<p align="center">
+  <a href="docs/zh-CN/experiments.md"><img src="https://img.shields.io/badge/%E7%B1%BB%E5%9E%8B-%E6%8A%80%E6%9C%AF%E7%AC%94%E8%AE%B0-7556B3?style=flat&amp;labelColor=293747" height="23" alt="类型 · 技术笔记"></a>
+  <a href="docs/zh-CN/architecture.md"><img src="https://img.shields.io/badge/macOS-Apple%20silicon-226794?style=flat&amp;labelColor=293747&amp;logo=apple&amp;logoColor=white" height="23" alt="macOS · Apple silicon"></a>
+  <a href="docs/zh-CN/architecture.md"><img src="https://img.shields.io/badge/Swift-Apple%20Speech-B34829?style=flat&amp;labelColor=293747&amp;logo=swift&amp;logoColor=white" height="23" alt="Swift · Apple Speech"></a>
+  <br>
+  <a href="docs/zh-CN/architecture.md"><img src="https://img.shields.io/badge/%E8%AF%86%E5%88%AB-%E7%AB%AF%E4%BE%A7%E8%AF%AD%E9%9F%B3%E8%AF%86%E5%88%AB-246A86?style=flat&amp;labelColor=293747" height="23" alt="识别 · 端侧语音识别"></a>
+  <a href="docs/zh-CN/video-captions.md"><img src="https://img.shields.io/badge/%E8%A7%86%E9%A2%91%E5%AD%97%E5%B9%95-FFmpeg%20%2B%20H.265-985720?style=flat&amp;labelColor=293747&amp;logo=ffmpeg&amp;logoColor=white" height="23" alt="视频字幕 · FFmpeg + H.265"></a>
+  <a href="docs/zh-CN/live-translation.md"><img src="https://img.shields.io/badge/%E6%B5%81%E5%BC%8F%E7%BF%BB%E8%AF%91-%E4%B8%AD%20%E2%86%92%20%E8%8B%B1-167061?style=flat&amp;labelColor=293747&amp;logo=nodedotjs&amp;logoColor=white" height="23" alt="流式翻译 · 中 → 英"></a>
+</p>
 
 <p align="center">
   <a href="#沿着音频看架构">架构与技术栈</a> ·
