@@ -1,0 +1,14 @@
+/.build/
+/.venv/
+/scratch/
+node_modules/
+__pycache__/
+.DS_Store
+*.wav
+*.aiff
+*.mp4
+*.MP4
+*.mov
+*.cues.json
+*.log
+*.jsonl
