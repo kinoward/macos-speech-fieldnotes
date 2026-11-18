@@ -72,3 +72,7 @@ In the local browser page, click **开始收听** (start), allow the microphone 
 In the new synthetic sample, the recognizer heard **望远镜** (“telescope”) as **望远近**. The English preview inherited the error. A file user can edit one cue and re-render from the original. A live client needs to replace an earlier translation whenever the underlying words change. The probes show how to observe that difference and how to measure draft latency separately from finalization. [Experiment log](docs/en/experiments.md)
 
 The repository contains original code, notes and silent illustrations under [MIT](LICENSE). The sample generator creates audio locally. Model assets, system voices and fonts are supplied by their respective providers. [Data handling and materials](docs/en/architecture.md#data-and-materials)
+
+## Contributing
+
+Follow Conventional Commits 1.0.0. Give each logical change its own commit, for example `fix(live): keep timed commas with their preceding clause`. When behavior changes, use the body to explain what prompted the change and how you checked it. The project history follows the file recognizer through video captioning, live translation and the segmentation experiments. [Commit specification](https://www.conventionalcommits.org/en/v1.0.0/) · [Project history](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
