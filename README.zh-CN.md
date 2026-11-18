@@ -2,6 +2,10 @@
 
 [English](./README.md) · 简体中文
 
+**作者** [Kino Ward (@kinoward)](https://github.com/kinoward) · [![GitHub Star 数量](https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&label=Stars)](https://github.com/kinoward/macos-speech-fieldnotes/stargazers "查看在 GitHub 上给本仓库点过 Star 的读者")
+
+**技术标签** `macOS` · `Swift` · `端侧语音识别` · `FFmpeg` · `实时翻译`
+
 > **技术笔记定稿 · 2026-11-18**
 >
 > 本仓库记录了在 macOS 上进行本地普通话识别的技术选型与实验经验。视频字幕和实时中译英各附一个最小示例，仅供学习和复现。笔记已定稿，仓库后续不再更新。文中的 macOS 与 SDK 版本、接口行为和实测耗时，均以定稿日期为时间基准。[查看定稿时的示例源码](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)

@@ -2,6 +2,10 @@
 
 English · [简体中文](./README.zh-CN.md)
 
+**Author** [Kino Ward (@kinoward)](https://github.com/kinoward) · [![GitHub Stars](https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&label=Stars)](https://github.com/kinoward/macos-speech-fieldnotes/stargazers "See who starred these notes on GitHub")
+
+**Topics** `macOS` · `Swift` · `on-device speech recognition` · `FFmpeg` · `live translation`
+
 > **Final snapshot · 2026-11-18**
 >
 > This repository preserves what we learned about on-device Mandarin speech recognition on macOS. Its code is for study and reproduction only. Two minimal demos cover video captioning and live Mandarin-to-English translation. The repository will receive no further updates. Use the snapshot date as the reference point for the macOS and SDK versions, API behavior and timings reported here. [Demo source at that date](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
