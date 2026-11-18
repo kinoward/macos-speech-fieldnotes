@@ -19,18 +19,28 @@ node --test experiments/revisions.test.mjs
 在另一终端启动 `OPEN_BROWSER=0 ./demos/live-translation/run`，再执行：
 
 ```bash
-for case_name in negation condition noun independent quiet noise silence; do
-  node demos/live-translation/replay.mjs "scratch/probes/$case_name.wav" --text
-done
+(
+  for case_name in negation condition noun independent mixed-condition pronoun-condition quiet noise silence; do
+    node demos/live-translation/replay.mjs "scratch/probes/$case_name.wav" --expect "$case_name" --text || exit 1
+  done
+)
+```
+
+在视频 Demo 的 Python 虚拟环境中，下面的命令会复查竖屏两行排版、AAC 中途的时间缺口，并确认故意推迟的音轨能被检出。
+
+```bash
+python3 experiments/video-regressions.py
 ```
 
 文件计时器只提取一次 WAV，随后三次启动已编译的 Swift 程序。计时包含进程启动、识别和读回 JSON；编译与模型安装位于测量之前。耗时除以音频时长得到实时系数，数值越小越快。[文件计时器](../../experiments/time-file.py)
 
-实时回放按照样本时钟，每 90 毫秒发送一包。`readyMs` 从建立连接开始计算，`firstMs` 与 `doneMs` 从桥接层发回 `ready` 开始计算。后续音频仍在播放时，第一段有可能已经定稿。`doneMs − audioMs` 是送完最后一包后的收尾耗时。`--text` 会输出文字，便于核对句意；省略该参数时终端仅输出指标。[回放客户端](../../demos/live-translation/replay.mjs)
+回放边解码边发送，按照样本时钟每 90 毫秒发送一包。`readyMs` 从建立连接开始计算，`firstMs` 与 `doneMs` 从桥接层发回 `ready` 开始计算。后续音频仍在播放时，第一段有可能已经定稿。`doneMs − audioMs` 是送完最后一包后的收尾耗时。`--text` 会输出文字，便于核对句意；`--expect` 按样例名称检查预期结果。例如，两条独立分句必须得到两个小节，即使中英文同时误合为一节也会报错。回放自己的录音时可省略 `--expect`。[回放客户端](../../demos/live-translation/replay.mjs)
 
-## 公开 Demo 的实测结果
+## 首次发布时的实测结果
 
 参考设备为 Apple M4、macOS 27.3、SDK 27.2、Swift 6.4.2、Node 26.13.1、FFmpeg 9.0.2。干净目录中的视频环境使用 Python 3.9.6 和 Pillow 11.3。语言资源在测量前已安装。下表每行均为**一次按真实时钟回放**，实时服务与 Swift 子进程的 IP 连接仅允许本机回环地址。
+
+首次发布的回放工具会在连接前解码完整录音；当前版本收到 `ready` 后才启动 FFmpeg，因此首条草稿计时也包含解码器启动时间。
 
 | 样例 | 音频（毫秒） | 首条中文草稿（毫秒） | 首条英文草稿（毫秒） | 首条英文定稿（毫秒） | 最终表现 |
 | --- | ---: | ---: | ---: | ---: | --- |

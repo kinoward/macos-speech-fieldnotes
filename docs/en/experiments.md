@@ -19,18 +19,28 @@ node --test experiments/revisions.test.mjs
 Start `OPEN_BROWSER=0 ./demos/live-translation/run` in another terminal, then run:
 
 ```bash
-for case_name in negation condition noun independent quiet noise silence; do
-  node demos/live-translation/replay.mjs "scratch/probes/$case_name.wav" --text
-done
+(
+  for case_name in negation condition noun independent mixed-condition pronoun-condition quiet noise silence; do
+    node demos/live-translation/replay.mjs "scratch/probes/$case_name.wav" --expect "$case_name" --text || exit 1
+  done
+)
+```
+
+With the video demo’s Python environment active, the following check exercises the two-line portrait layout, a gap in the AAC clock, and a deliberately delayed soundtrack.
+
+```bash
+python3 experiments/video-regressions.py
 ```
 
 The file timer extracts the WAV once and starts a fresh compiled Swift process three times. Its timed interval includes process startup, ASR and reading the JSON result. Compilation and model installation occur before measurement. The realtime factor is elapsed time divided by audio duration; smaller is faster. [Timer](../../experiments/time-file.py)
 
-The live probe sends 90 ms packets according to sample time. `readyMs` starts at connection setup. `firstMs` and `doneMs` start when the bridge reports `ready`. The first final can arrive while later audio is still playing. `doneMs − audioMs` measures the tail after the last samples. `--text` displays local words for semantic review. Run without it to keep the terminal output to metrics. [Replay client](../../demos/live-translation/replay.mjs)
+The replay decodes the audio incrementally and sends 90 ms packets according to sample time. `readyMs` starts at connection setup. `firstMs` and `doneMs` start when the bridge reports `ready`. The first final can arrive while later audio is still playing. `doneMs − audioMs` measures the tail after the last samples. `--text` displays local words for semantic review. `--expect` checks a named fixture’s expected outcome. For example, two independent clauses must yield two sections even when both languages incorrectly agree on one. Omit `--expect` for your own recordings. [Replay client](../../demos/live-translation/replay.mjs)
 
-## Results from the public demo
+## Measurements from the initial release
 
 Reference machine: Apple M4, macOS 27.3, SDK 27.2, Swift 6.4.2, Node 26.13.1 and FFmpeg 9.0.2. The clean video environment used Python 3.9.6 and Pillow 11.3. The language assets were already installed. Each live row below is **one paced replay**, with the live server and its Swift child restricted to loopback for IP connections.
+
+The original replay decoded the whole file before opening the connection. The current replay starts FFmpeg at `ready`, so its first-draft timing also includes decoder startup.
 
 | Probe | Audio (ms) | First Chinese draft (ms) | First English draft (ms) | First final English (ms) | Observed final content |
 | --- | ---: | ---: | ---: | ---: | --- |
