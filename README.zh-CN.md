@@ -4,9 +4,12 @@
 用同一个端侧普通话识别器为视频加字幕，也把麦克风里的中文实时译成英文。</p>
 
 <p align="center">
-  <a href="./README.md" lang="en">English</a> · 简体中文<br>
-  作者 <a href="https://github.com/kinoward">Kino Ward (@kinoward)</a> ·
-  <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars" alt="GitHub Star 数量"></a>
+  <a href="./README.md" lang="en">English</a> · 简体中文
+</p>
+
+<p align="center">
+  <a href="https://github.com/kinoward"><img src="https://img.shields.io/badge/%E4%BD%9C%E8%80%85-Kino%20Ward-5F568C?style=flat&amp;labelColor=293747&amp;logo=github&amp;logoColor=white" height="23" alt="作者 Kino Ward (@kinoward)"></a>
+  <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars&amp;labelColor=293747&amp;color=1679A3" height="23" alt="GitHub Star 数量"></a>
 </p>
 
 <p align="center"><code>macOS</code> <code>Apple silicon</code> <code>Swift</code> <code>端侧语音识别</code> <code>视频字幕</code> <code>流式翻译</code></p>

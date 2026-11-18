@@ -4,9 +4,12 @@
 One on-device Mandarin recognizer powers both video subtitles and live Mandarin-to-English translation.</p>
 
 <p align="center">
-  English · <a href="./README.zh-CN.md" lang="zh-CN">简体中文</a><br>
-  By <a href="https://github.com/kinoward">Kino Ward (@kinoward)</a> ·
-  <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars" alt="GitHub star count"></a>
+  English · <a href="./README.zh-CN.md" lang="zh-CN">简体中文</a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/kinoward"><img src="https://img.shields.io/badge/Author-Kino%20Ward-5F568C?style=flat&amp;labelColor=293747&amp;logo=github&amp;logoColor=white" height="23" alt="Author Kino Ward (@kinoward)"></a>
+  <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars&amp;labelColor=293747&amp;color=1679A3" height="23" alt="GitHub star count"></a>
 </p>
 
 <p align="center"><code>macOS</code> <code>Apple silicon</code> <code>Swift</code> <code>on-device ASR</code> <code>video subtitles</code> <code>streaming translation</code></p>
