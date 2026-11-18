@@ -111,6 +111,8 @@ python -m pip install -r demos/video-captions/requirements.txt
   <a href="https://github.com/kinoward"><img src="https://github.com/kinoward.png?size=96" width="48" height="48" alt=""><br><strong>Kino Ward (@kinoward)</strong></a>
 </p>
 
+Kino 编写了视频字幕和实时翻译两个示例，设计了检验普通话断句的音频回放实验，并整理成中英文实践笔记。实验记录里可以看到，同一句中文在不同的停顿处断开，会怎样改变英文译文的意思。[实验记录](docs/zh-CN/experiments.md) · [GitHub 贡献者记录](https://github.com/kinoward/macos-speech-fieldnotes/graphs/contributors)
+
 ## 如何阅读提交历史
 
 按时间顺序阅读提交，可以看到实验怎样从文件识别发展到视频字幕、实时翻译和断句。提交历史遵循 Conventional Commits 1.0.0，每次提交聚焦一项改动。例如，`fix(live): keep timed commas with their preceding clause` 记录了逗号应归入前一分句的决定，提交正文说明了原因和验证方法。[提交规范](https://www.conventionalcommits.org/zh-hans/v1.0.0/) · [项目提交历史](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
