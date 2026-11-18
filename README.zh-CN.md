@@ -13,7 +13,8 @@
 
 <p align="center">
   <a href="#沿着音频看架构">架构与技术栈</a> ·
-  <a href="#运行任一-demo">运行示例</a>
+  <a href="#运行任一-demo">运行示例</a> ·
+  <a href="#star-趋势">Star 趋势</a>
 </p>
 
 > **2026-11-18 定稿**。两个示例仅供学习和复现，仓库后续不再更新。文中的 macOS 与 SDK 版本、接口行为和实测耗时，均以这一天为时间基准。[查看定稿时的示例源码](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
@@ -96,6 +97,16 @@ python -m pip install -r demos/video-captions/requirements.txt
 ## 如何阅读提交历史
 
 按时间顺序阅读提交，可以看到实验怎样从文件识别发展到视频字幕、实时翻译和断句。提交历史遵循 Conventional Commits 1.0.0，每次提交聚焦一项改动。例如，`fix(live): keep timed commas with their preceding clause` 记录了逗号应归入前一分句的决定，提交正文说明了原因和验证方法。[提交规范](https://www.conventionalcommits.org/zh-hans/v1.0.0/) · [项目提交历史](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
+
+## Star 趋势
+
+<p align="center">
+  <a href="https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&amp;type=date">
+    <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="macOS Speech Field Notes 的 GitHub Star 数量随日期变化的折线图">
+  </a>
+</p>
+
+页首徽章显示当前 Star 数量，这张图按日期展示变化。有多个日期的数据点后才会形成折线。[查看交互图表](https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&type=date)
 
 ## 开源协议
 
