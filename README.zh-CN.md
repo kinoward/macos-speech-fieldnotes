@@ -105,6 +105,12 @@ python -m pip install -r demos/video-captions/requirements.txt
 
 在合成样例中，识别器把“望远镜”听成了“望远近”，英文预览也继承了这个错误。视频用户可以只改一条字幕，从原片重新烧录。实时客户端则需要在原文被修订时替换旧译文。实验手册给出了观察这两种行为的方法，也说明了预览延迟和定稿时间应怎样分别测量。[实验记录](docs/zh-CN/experiments.md)
 
+## 贡献者
+
+<p>
+  <a href="https://github.com/kinoward"><img src="https://github.com/kinoward.png?size=96" width="48" height="48" alt=""><br><strong>Kino Ward (@kinoward)</strong></a>
+</p>
+
 ## 如何阅读提交历史
 
 按时间顺序阅读提交，可以看到实验怎样从文件识别发展到视频字幕、实时翻译和断句。提交历史遵循 Conventional Commits 1.0.0，每次提交聚焦一项改动。例如，`fix(live): keep timed commas with their preceding clause` 记录了逗号应归入前一分句的决定，提交正文说明了原因和验证方法。[提交规范](https://www.conventionalcommits.org/zh-hans/v1.0.0/) · [项目提交历史](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
