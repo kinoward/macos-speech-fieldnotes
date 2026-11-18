@@ -29,6 +29,14 @@ One on-device Mandarin recognizer powers both video subtitles and live Mandarin-
 
 ## How audio becomes captions
 
+Both demos start with the same recognizer. A video editor can correct a word before export. A live viewer sees a draft first, so the English translation needs to follow revisions to the Mandarin text.
+
+| Path | Technologies | What they do here |
+| --- | --- | --- |
+| [Shared recognizer](docs/en/architecture.md) | Swift · AVFoundation · Apple Speech (`SpeechAnalyzer`, `SpeechTranscriber`) | Feed file or microphone audio to the on-device model. Read timed text from a file or draft and final results from a stream. |
+| [Video captions](docs/en/video-captions.md) | Python · Pillow · FFmpeg / ffprobe · H.265 (libx265) | Review timed cues, draw the text and burn it into the original video. Copy the AAC track and use two-pass encoding for a size budget. |
+| [Live translation](docs/en/live-translation.md) | JavaScript · Web Audio API (`AudioWorklet`) · Node.js · WebSocket (`ws`) · Apple Translation (`TranslationSession`) | Stream mono PCM over a local connection, choose sentence breaks and keep the English caption paired with the latest Mandarin text. |
+
 ```mermaid
 flowchart TD
   file("Video file"):::video --> wav["FFmpeg · mono WAV"]:::video
@@ -49,18 +57,15 @@ flowchart TD
   classDef core fill:#203c42,stroke:#82c6ad,color:#ffffff,stroke-width:2px
 ```
 
-| Read this when… | What you can reuse |
-| --- | --- |
-| [Choosing a local speech API](docs/en/architecture.md) | Model readiness, file and stream inputs, system versions and the boundary between local processing and asset downloads. |
-| [Adding subtitles to a video](docs/en/video-captions.md) | Word timing, cue editing, legible type, audio stream copy and a two-pass size budget. |
-| [Building live bilingual captions](docs/en/live-translation.md) | A revision-aware translation loop and a worked example of a pause that could reverse the speaker's meaning. |
-| [Repeating or extending the experiments](docs/en/experiments.md) | Runnable probes, time origins, measured results and research questions with concrete controls. |
+To reproduce the measurements, start with the file-timing probes and live replays. The experiment log gives the input, timing reference and controls for each run. [Experiments and results](docs/en/experiments.md)
 
 ## Run either demo
 
 Tested on **Apple silicon with macOS 27.3 and the macOS 27.2 SDK**. Both demos compile Swift locally and work without a cloud API key. Prepare the Mandarin speech asset once. The live demo also needs the Simplified Chinese and US English translation languages in **System Settings → General → Language & Region → Translation Languages**. [Compatibility and asset setup](docs/en/architecture.md)
 
-**A · Burn subtitles into a video.** Use Python 3 with Pillow and an FFmpeg installation including `ffprobe`, `libx264` for the sample and `libx265` for export. From the repository root:
+### Burn subtitles into a video
+
+Use Python 3 with Pillow and an FFmpeg installation including `ffprobe`, `libx264` for the sample and `libx265` for export. Run these commands from the repository root.
 
 ```bash
 python3 -m venv .venv
@@ -73,7 +78,9 @@ python -m pip install -r demos/video-captions/requirements.txt
 
 Open `scratch/captioned.mp4`. Its editable timeline is `scratch/captioned.cues.json`. Substitute your own SDR MP4 with AAC to try a different voice. [Review and re-render](docs/en/video-captions.md)
 
-**B · Speak Mandarin, read English.** Install Node.js 22+ with npm. The launcher installs its one locked dependency on first use.
+### Speak Mandarin, read English
+
+Install Node.js 22+ with npm. The launcher installs its one locked dependency on first use.
 
 ```bash
 ./demos/live-translation/run --prepare

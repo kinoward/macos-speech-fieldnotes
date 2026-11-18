@@ -29,6 +29,14 @@
 
 ## 沿着音频看架构
 
+两个示例共用同一个识别器。处理视频时，可以在导出前改正一个错字。实时翻译时，观众先看到的是草稿，识别器每次修订中文，界面上的译文也要跟着更新。
+
+| 实现路径 | 使用的技术 | 在示例中的作用 |
+| --- | --- | --- |
+| [共享识别器](docs/zh-CN/architecture.md) | Swift · AVFoundation · Apple Speech（`SpeechAnalyzer`、`SpeechTranscriber`） | 把文件或麦克风音频送入端侧模型。文件识别返回带时间信息的文本，流式识别陆续返回草稿与定稿。 |
+| [视频字幕](docs/zh-CN/video-captions.md) | Python · Pillow · FFmpeg / ffprobe · H.265（libx265） | 校对时间轴、绘制字幕并烧录到原视频，复制 AAC 音轨。需要控制文件大小时使用两遍编码。 |
+| [实时翻译](docs/zh-CN/live-translation.md) | JavaScript · Web Audio API（`AudioWorklet`） · Node.js · WebSocket（`ws`） · Apple Translation（`TranslationSession`） | 在本机流式传输单声道 PCM，结合停顿和句意断句，让英文字幕与最新中文保持对应。 |
+
 ```mermaid
 flowchart TD
   file("本地视频"):::video --> wav["FFmpeg · 单声道 WAV"]:::video
@@ -49,18 +57,15 @@ flowchart TD
   classDef core fill:#203c42,stroke:#82c6ad,color:#ffffff,stroke-width:2px
 ```
 
-| 你正在解决的问题 | 可复用的内容 |
-| --- | --- |
-| [怎样选择本地语音接口](docs/zh-CN/architecture.md) | 模型准备、文件和音频流输入、系统版本，以及本地推理和下载资源的边界。 |
-| [怎样为视频加字幕](docs/zh-CN/video-captions.md) | 词级时间范围、字幕校对、文字排版、原音轨复制和两遍编码的体积预算。 |
-| [怎样做实时双语字幕](docs/zh-CN/live-translation.md) | 根据原文修订更新译文，以及一句话在停顿处被切开后，为什么会译出相反意思。 |
-| [怎样复现或扩展研究](docs/zh-CN/experiments.md) | 可执行的实验、计时起点、实测结果，以及带对照条件的后续研究问题。 |
+要复现实测结果，可以从文件识别计时和实时音频回放入手。实验记录列出了输入样本、计时起点和对照条件。[实验方法与结果](docs/zh-CN/experiments.md)
 
 ## 运行任一 Demo
 
 实测环境为 **Apple silicon、macOS 27.3、macOS 27.2 SDK**。两个 Demo 均在本机编译 Swift，使用系统语言资源，无需云端 API 密钥。请先准备普通话语音识别资源。实时翻译还需在**系统设置 → 通用 → 语言与地区 → 翻译语言**下载简体中文和美式英语。[兼容性与语言资源](docs/zh-CN/architecture.md)
 
-**A · 把字幕烧进视频。** 准备 Python 3、Pillow 和 FFmpeg；生成示例需要 `libx264`，导出需要 `libx265`，读取媒体信息需要 `ffprobe`。在仓库根目录执行：
+### 把字幕烧进视频
+
+准备 Python 3、Pillow 和 FFmpeg。生成示例需要 `libx264`，导出需要 `libx265`，读取媒体信息需要 `ffprobe`。在仓库根目录执行以下命令。
 
 ```bash
 python3 -m venv .venv
@@ -73,7 +78,9 @@ python -m pip install -r demos/video-captions/requirements.txt
 
 打开 `scratch/captioned.mp4` 即可观看，旁边的 `scratch/captioned.cues.json` 是可编辑的时间轴。也可以换成自己的 SDR 视频，第一条音轨需为 AAC。[校对和重新烧录](docs/zh-CN/video-captions.md)
 
-**B · 说中文，看英文。** 准备 Node.js 22+ 和 npm。首次启动时，脚本会安装锁文件指定的一个依赖。
+### 说中文，看英文
+
+准备 Node.js 22+ 和 npm。首次启动时，脚本会安装锁文件指定的一个依赖。
 
 ```bash
 ./demos/live-translation/run --prepare
