@@ -2,15 +2,21 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { realpathSync } from "node:fs";
 import { setTimeout as delay } from "node:timers/promises";
+import { parseArgs } from "node:util";
 import WebSocket from "ws";
+import { checkProbe, probes } from "../../experiments/probe-expectations.mjs";
 
-const [file, option] = process.argv.slice(2);
-if (!file || (option && option !== "--text")) {
-  console.error("Usage: node replay.mjs INPUT [--text]");
+const { positionals, values } = parseArgs({
+  allowPositionals: true, options: { text: { type: "boolean" }, expect: { type: "string" } },
+});
+if (positionals.length !== 1 || (values.expect !== undefined && !probes.has(values.expect))) {
+  console.error("Usage: node replay.mjs INPUT [--text] [--expect CASE]");
+  console.error("Probe names:", [...probes.keys()].join(", "));
   process.exit(2);
 }
+const file = realpathSync(positionals[0]);
 const pcm = execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", "-nostdin",
-  "-protocol_whitelist", "file,pipe", "-i", realpathSync(file),
+  "-protocol_whitelist", "file,pipe", "-i", file,
   "-map", "0:a:0", "-ar", "16000", "-ac", "1", "-f", "s16le", "-"], { maxBuffer: 32 * 1024 * 1024 });
 const origin = `http://127.0.0.1:${process.env.PORT || 8765}`;
 const socket = new WebSocket(origin.replace("http:", "ws:") + "/stream", { origin });
@@ -63,16 +69,19 @@ try {
     });
   });
   assert.deepEqual([...source.keys()], [...translated.keys()], "final segments must pair");
+  const sections = [];
   for (const [id, row] of source) {
     const match = translated.get(id);
     assert.equal(match.revision, row.revision, "final revisions must match");
-    assert.equal(match.text.split("\n\n").length, row.text.split("\n\n").length, "section count must match");
+    const chinese = row.text.split("\n\n");
+    const english = match.text.split("\n\n");
+    assert.equal(english.length, chinese.length, "section count must match");
+    for (const [index, text] of chinese.entries()) sections.push([text, english[index]]);
   }
-  if (pcm.some(value => value !== 0)) assert(source.size > 0, "expected speech in this test input");
-  else assert.equal(Object.keys(firstMs).length, 0, "digital silence must stay empty");
+  if (values.expect) checkProbe(values.expect, sections, firstMs);
   const report = { audioMs: Math.round(pcm.length / 32), readyMs: Math.round(started - begin),
     firstMs, doneMs: Math.round(performance.now() - started), pairedSegments: source.size };
-  if (option === "--text") {
+  if (values.text) {
     report.sections = [...source].map(([id, row]) => [row.text, translated.get(id).text]);
   }
   console.log(JSON.stringify(report, null, 2));
