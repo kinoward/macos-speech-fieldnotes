@@ -7,18 +7,19 @@ import sys
 import tempfile
 from time import perf_counter
 
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "demos/video-captions"))
+from caption import recognition_wav
+
 
 def main():
     if len(sys.argv) != 2:
         sys.exit("Usage: python3 experiments/time-file.py INPUT")
-    root = Path(__file__).resolve().parents[1]
-    bridge = subprocess.check_output([root / "scripts/build-swift", "file"], text=True).strip()
+    bridge = subprocess.check_output([ROOT / "scripts/build-swift", "file"], text=True).strip()
     with tempfile.TemporaryDirectory() as directory:
         wav = Path(directory) / "input.wav"
         start = perf_counter()
-        subprocess.run(["ffmpeg", "-v", "error", "-nostdin", "-protocol_whitelist", "file,pipe",
-                        "-i", Path(sys.argv[1]).resolve(strict=True), "-map", "0:a:0", "-ac", "1",
-                        "-ar", "16000", "-c:a", "pcm_s16le", wav], check=True)
+        recognition_wav(Path(sys.argv[1]).resolve(strict=True), "a:0", wav)
         extract_seconds = perf_counter() - start
         duration = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration",
                                                   "-of", "default=nw=1:nk=1", wav]))

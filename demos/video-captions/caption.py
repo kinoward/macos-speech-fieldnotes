@@ -31,6 +31,12 @@ def probe(source):
     return info["format"], video, audio
 
 
+def recognition_wav(source, audio_index, wav):
+    subprocess.run([*FFMPEG, "-i", source, "-map", f"0:{audio_index}", "-ac", "1",
+                    "-af", "asetpts=PTS-STARTPTS,aresample=16000:async=1:min_hard_comp=0.001:first_pts=0",
+                    "-c:a", "pcm_s16le", wav], check=True)
+
+
 def dimensions(video, limit):
     aspect = video.get("sample_aspect_ratio", "1:1")
     aspect = Fraction(aspect.replace(":", "/")) if aspect not in ("0:1", "N/A") else 1
@@ -119,8 +125,7 @@ def main():
         else:
             bridge = subprocess.check_output([ROOT / "scripts/build-swift", "file"], text=True).strip()
             wav = directory / "speech.wav"
-            subprocess.run([*FFMPEG, "-i", source, "-map", f"0:{audio['index']}", "-ar", "16000",
-                            "-ac", "1", "-c:a", "pcm_s16le", wav], check=True)
+            recognition_wav(source, audio["index"], wav)
             phrases = json.loads(subprocess.check_output([bridge, wav]))
             offset = float(audio.get("start_time", 0)) - float(format_info.get("start_time", 0))
             cues = make_draft(phrases, layout, offset, duration)
