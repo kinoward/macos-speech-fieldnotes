@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+cd "$(dirname "$0")"
+if [[ $# -gt 1 ]]; then echo 'Usage: run [--prepare | --check]' >&2; exit 2; fi
+case "${1:-}" in
+  --help|-h) echo 'Usage: demos/live-translation/run [--prepare | --check]'; exit ;;
+  --prepare|--check) bridge=$(../../scripts/build-swift live); exec "$bridge" "$1" ;;
+  '') ;;
+  *) echo 'Usage: run [--prepare | --check]' >&2; exit 2 ;;
+esac
+if ! command -v node >/dev/null || ! command -v npm >/dev/null ||
+   ! node -e 'process.exit(Number(process.versions.node.split(".")[0]) >= 22 ? 0 : 1)'; then
+  echo 'Install Node.js 22 or later with npm.' >&2
+  exit 1
+fi
+bridge=$(../../scripts/build-swift live)
+if [[ ! -f node_modules/ws/package.json ]] || ! cmp -s package-lock.json node_modules/.fieldnotes-lock; then
+  npm ci --ignore-scripts --no-audit --no-fund
+  cp package-lock.json node_modules/.fieldnotes-lock
+fi
+export SPEECH_BRIDGE="$bridge" OPEN_BROWSER="${OPEN_BROWSER:-1}"
+exec node server.mjs

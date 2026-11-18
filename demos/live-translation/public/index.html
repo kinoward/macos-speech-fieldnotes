@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f4ef">
+  <title>实时翻译</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <main class="translator">
+    <header class="topline">
+      <h1>实时翻译</h1>
+      <div class="controls">
+        <div class="status" role="status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="status-text">麦克风未开启</span>
+        </div>
+        <button class="mic-button" id="mic-button" type="button">
+          <span class="button-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span id="button-text">开始收听</span>
+        </button>
+      </div>
+    </header>
+
+    <p id="error" class="error" role="alert" hidden></p>
+
+    <section class="captions" aria-label="实时双语字幕">
+      <div class="caption-headings" aria-hidden="true">
+        <h2>中文原文</h2>
+        <h2 lang="en">English Translation</h2>
+      </div>
+      <div id="caption-body" class="caption-body" tabindex="0" role="region" aria-label="中文原文与英文翻译">
+        <div id="caption-placeholder" class="caption-row caption-placeholder">
+          <p class="caption-cell" data-label="中文原文">开始收听后，中文原文将在此显示。</p>
+          <p class="caption-cell" data-label="English Translation" lang="en">English translation will appear here.</p>
+        </div>
+        <div id="caption-rows"></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
