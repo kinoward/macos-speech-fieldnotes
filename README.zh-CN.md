@@ -32,9 +32,9 @@
 
 ## 按问题找方案
 
-- **怎样把普通话 WAV 转成带时间戳的 JSON？** Swift 转写工具会为每段文字标出起止时间，单位为秒。[Swift 转写源码](demos/video-captions/Transcribe.swift)
-- **怎样避免停顿改变译文的意思？** 在“我没有说要……关掉走廊的灯”中间断句，后半句就可能被译成关灯指令。[断句规则](docs/zh-CN/live-translation.md#怎样决定断点) · [回放 700 ms 停顿](docs/zh-CN/experiments.md#复现测量)
-- **怎样防止迟到的旧译文重新上屏？** 中文被修订后，界面先核对英文回复对应的原文版本，再决定是否显示。[显示逻辑](demos/live-translation/public/revisions.js)
+- **怎样把普通话 WAV 转成带时间戳的 JSON？** Swift 转写工具会为每段文字标出起止时间，单位为秒。[转写一个 WAV 文件](#转写一个-wav-文件) · [Swift 源码](demos/video-captions/Transcribe.swift)
+- **怎样避免停顿改变译文的意思？** 在“我没有说要……关掉走廊的灯”中间断句，后半句就可能被译成关灯指令。[断句规则](docs/zh-CN/live-translation.md#怎样决定断点) · [回放 700 ms 停顿](docs/zh-CN/live-translation.md#回放否定句)
+- **怎样防止迟到的旧译文重新上屏？** 中文被修订后，界面先核对英文回复对应的原文版本，再决定是否显示。[运行 Node 用例](#验证迟到的译文) · [显示逻辑](demos/live-translation/public/revisions.js)
 - **怎样确认烧录字幕后音画仍然同步？** 对照原片逐帧检查显示时间，并核对 AAC 音频包的哈希。[媒体检查脚本](experiments/check-media.py) · [验收记录](docs/zh-CN/experiments.md#验收记录)
 
 **运行两个示例需要 Apple 芯片 Mac、macOS 27+ 和 macOS 27+ SDK。** 首次使用需准备普通话识别模型。实时翻译还需下载简体中文和美式英语语言包。[环境准备](docs/zh-CN/architecture.md#准备一台-mac)
@@ -78,6 +78,34 @@ flowchart TD
 
 要复现实测结果，可以从文件识别计时和实时音频回放入手。实验记录列出了输入样本、计时起点和对照条件。[实验方法与结果](docs/zh-CN/experiments.md)
 
+## 单独试一段实现
+
+### 验证迟到的译文
+
+用例先把“打开灯”修订成“别打开灯”，再故意送达第一句的英文。旧回复被丢弃、正确译文留在屏幕上，用例才会通过。在仓库根目录运行，只需要 Node.js 22+。
+
+```bash
+node --test \
+  experiments/revisions.test.mjs
+```
+
+如果这段示例帮你解决了中文断句或旧译文覆盖的问题，欢迎点个 Star，方便下次查回这段实现。
+
+### 转写一个 WAV 文件
+
+在符合上述条件的 Mac 上，从仓库根目录运行以下命令。将 `speech.wav` 换成自己的 16 kHz 单声道 PCM WAV。第一行编译 Swift 工具并准备语言资源，第二行把 JSON 输出到终端。最外层数组按短语分组，每个短语包含若干带时间戳的文本片段。
+
+```bash
+./demos/video-captions/run --prepare
+./.build/file speech.wav
+```
+
+在“走廊的灯”合成样例中，第一个片段如下，时间单位为秒。
+
+```json
+{"start":0,"end":0.24,"text":"我"}
+```
+
 ## 运行任一 Demo
 
 实测环境为 **macOS 27.3 和 macOS 27.2 SDK**。两个 Demo 均在本机编译 Swift，无需云端 API 密钥。
@@ -89,20 +117,27 @@ flowchart TD
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r demos/video-captions/requirements.txt
-./demos/video-captions/run --prepare
-./scripts/make-sample scratch/sky.mp4
-./demos/video-captions/run scratch/sky.mp4 scratch/captioned.mp4
+video=demos/video-captions
+python -m pip install \
+  -r "$video/requirements.txt"
+"$video/run" --prepare
+./scripts/make-sample \
+  scratch/sky.mp4
+"$video/run" scratch/sky.mp4 \
+  scratch/captioned.mp4
 ```
 
 打开 `scratch/captioned.mp4` 即可观看，旁边的 `scratch/captioned.cues.json` 是可编辑的时间轴。也可以换成自己的 SDR 视频，第一条音轨需为 AAC。[校对和重新烧录](docs/zh-CN/video-captions.md)
+
+在 **0.80 MB** 预算的样例中，字幕成片为 **769,898 字节**。全部 178 帧的显示时间与原片一致，48 kHz AAC 音频载荷的哈希也一致。[运行媒体验收](docs/zh-CN/video-captions.md#怎样验收) · [验收记录](docs/zh-CN/experiments.md#验收记录)
 
 ### 说中文，看英文
 
 准备 Node.js 22+ 和 npm。首次启动时，脚本会安装锁文件指定的一个依赖。
 
 ```bash
-./demos/live-translation/run --prepare
+./demos/live-translation/run \
+  --prepare
 ./demos/live-translation/run
 ```
 

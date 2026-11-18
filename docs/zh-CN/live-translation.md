@@ -48,13 +48,23 @@ sequenceDiagram
 
 点击停止时，先要求 AudioWorklet 交出最后一块不足整包的音频，再由服务端关闭标准输入。Swift 冲刷音频转换器、完成识别、处理完待定稿翻译，最后发出 `done`。输入音轨意外结束走同一路径。直接关闭网页则释放连接和子进程。控制消息与二进制音频分别处理。
 
-```bash
-# 终端 1，语言资源准备好后启动
-OPEN_BROWSER=0 ./demos/live-translation/run
+### 回放否定句
 
-# 终端 2，按麦克风速度回放本地样例
-node demos/live-translation/replay.mjs scratch/sky.mp4 --text
-node --test experiments/revisions.test.mjs
+样例先说“我没有说要”，停顿 700 ms，再说“关掉走廊的灯”。预期英文保留完整的否定含义“I didn’t say to turn off the hallway light”。用回放即可验证，无需麦克风。先准备识别与翻译语言资源并安装 FFmpeg，两个终端都从仓库根目录运行。[语言资源准备](architecture.md#准备一台-mac)
+
+```bash
+# 终端 1
+OPEN_BROWSER=0 ./demos/live-translation/run
 ```
 
-回放会输出计时，并检查最终段号、版本号和小节数。加 `--text` 会将文字一并打印在终端；仅测时间时可省略。实体麦克风权限、说话距离变化和多人重叠是这类回放无法测量的变量。[网页实现](../../demos/live-translation/public/app.js) · [实验设计](experiments.md)
+用已安装的普通话 `say` 语音生成一次样例，默认音色为 Tingting。如果 `scratch/probes` 中已有这些样例，可直接执行回放命令。
+
+```bash
+# 终端 2
+mkdir -p scratch
+./experiments/make-probes scratch/probes
+node demos/live-translation/replay.mjs \
+  scratch/probes/negation.wav --expect negation --text
+```
+
+查看终端输出的英文定稿和小节数。检查要求整句只有一个小节，英文保留与灯有关的否定含义。结束后，在服务终端按 Ctrl-C。换成自己的录音时，替换 WAV 路径并省略 `--expect negation`。[语义检查条件](../../experiments/probe-expectations.mjs) · [实验与计时](experiments.md)

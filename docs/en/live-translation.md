@@ -48,13 +48,23 @@ These are Mandarin heuristics tuned on a small set of examples. In the new indep
 
 Clicking Stop first asks the worklet for its partial last packet. The server then closes stdin; Swift flushes the audio converter, finalizes recognition and drains the translation queue before replying `done`. An input track ending follows the same flow. Closing the entire page instead releases the connection and its child process. The application keeps its control messages separate from the binary audio.
 
-```bash
-# Terminal 1 — after the language assets are ready
-OPEN_BROWSER=0 ./demos/live-translation/run
+### Replay the negation probe
 
-# Terminal 2 — send a local sample at microphone speed
-node demos/live-translation/replay.mjs scratch/sky.mp4 --text
-node --test experiments/revisions.test.mjs
+The speaker says “我没有说要”, pauses for 700 ms, then finishes “关掉走廊的灯”. The expected translation keeps “I didn’t say to turn off the hallway light” together. To try it without a microphone, prepare the speech and translation assets and install FFmpeg. Run both terminals from the repository root. [Language setup](architecture.md#prepare-a-mac)
+
+```bash
+# Terminal 1
+OPEN_BROWSER=0 ./demos/live-translation/run
 ```
 
-The replay prints times and checks final segment IDs, revisions and section counts. `--text` also prints the words to the terminal; omit it for timing-only output. Real microphone permissions, changing speaker distance and overlapping voices introduce variables that the replay cannot measure. [Browser client](../../demos/live-translation/public/app.js) · [Experiment design](experiments.md)
+Generate the fixtures once using the installed Mandarin `say` voice (Tingting by default). If `scratch/probes` already contains the fixtures, go straight to the replay command.
+
+```bash
+# Terminal 2
+mkdir -p scratch
+./experiments/make-probes scratch/probes
+node demos/live-translation/replay.mjs \
+  scratch/probes/negation.wav --expect negation --text
+```
+
+Inspect the final English and the section count. The check expects one section and a negated reference to the light. Press Ctrl-C in the server terminal when finished. For another recording, replace the WAV path and omit `--expect negation`. [Expected content](../../experiments/probe-expectations.mjs) · [Experiments and timing](experiments.md)
