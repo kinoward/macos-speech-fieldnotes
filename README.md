@@ -1,24 +1,31 @@
-# macOS Speech Field Notes
+<h1 align="center">macOS Speech Field Notes</h1>
 
-English · [简体中文](./README.zh-CN.md)
+<p align="center"><strong>Engineering field notes · Two minimal demos · Reproducible experiments</strong><br>
+One on-device Mandarin recognizer powers both video subtitles and live Mandarin-to-English translation.</p>
 
-**Author** [Kino Ward (@kinoward)](https://github.com/kinoward) · [![GitHub Stars](https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&label=Stars)](https://github.com/kinoward/macos-speech-fieldnotes/stargazers "See who starred these notes on GitHub")
+<p align="center">
+  English · <a href="./README.zh-CN.md" lang="zh-CN">简体中文</a><br>
+  By <a href="https://github.com/kinoward">Kino Ward (@kinoward)</a> ·
+  <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars" alt="GitHub star count"></a>
+</p>
 
-**Topics** `macOS` · `Swift` · `on-device speech recognition` · `FFmpeg` · `live translation`
+<p align="center"><code>macOS</code> <code>Apple silicon</code> <code>Swift</code> <code>on-device ASR</code> <code>video subtitles</code> <code>streaming translation</code></p>
 
-> **Final snapshot · 2026-11-18**
->
-> This repository preserves what we learned about on-device Mandarin speech recognition on macOS. Its code is for study and reproduction only. Two minimal demos cover video captioning and live Mandarin-to-English translation. The repository will receive no further updates. Use the snapshot date as the reference point for the macOS and SDK versions, API behavior and timings reported here. [Demo source at that date](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+<p align="center">
+  <a href="#how-audio-becomes-captions">Architecture &amp; stack</a> ·
+  <a href="#run-either-demo">Run the demos</a>
+</p>
 
-How do you turn Mandarin speech into captions that people can actually read? These field notes follow the same on-device recognizer into two settings. With a video file, you can review the timeline before burning in the text. With a live microphone, people need words now, even while the recognizer is still changing its mind.
+> **Final snapshot · 2026-11-18.** The demos are for study and reproduction only. The repository will receive no further updates. Use this date as the reference for the macOS and SDK versions, API behavior and timings reported here. [Demo source at that date](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
 
-<picture>
-  <source media="(max-width: 600px)" srcset="docs/assets/preview-mobile.png">
-  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/preview.png">
-  <img src="docs/assets/preview.gif" width="1120" alt="The same Mandarin sentence burned into a night-sky video and progressively translated into English. Final text: There is a star in the night sky.">
-</picture>
-
-*Illustrated replay. The video side shows the reviewed caption. The live side shows a draft growing into a final translation.* [Still image](docs/assets/preview.png)
+<p align="center">
+  <picture>
+    <source media="(max-width: 600px)" srcset="docs/assets/preview-mobile.png">
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/preview.png">
+    <img src="docs/assets/preview.gif" width="1120" alt="The same Mandarin sentence burned into a night-sky video and progressively translated into English. Final text: There is a star in the night sky.">
+  </picture>
+</p>
+<p align="center"><em>One utterance, illustrated. The reviewed video caption is on the left. The live draft and final translation are on the right.</em> · <a href="docs/assets/preview.png">Still image</a></p>
 
 ## How audio becomes captions
 

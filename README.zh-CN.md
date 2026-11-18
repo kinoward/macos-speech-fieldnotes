@@ -1,24 +1,31 @@
-# macOS 本地语音识别实践笔记
+<h1 align="center">macOS 本地语音识别实践笔记</h1>
 
-[English](./README.md) · 简体中文
+<p align="center"><strong>技术实践笔记 · 两个最小示例 · 可复现实验</strong><br>
+用同一个端侧普通话识别器为视频加字幕，也把麦克风里的中文实时译成英文。</p>
 
-**作者** [Kino Ward (@kinoward)](https://github.com/kinoward) · [![GitHub Star 数量](https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&label=Stars)](https://github.com/kinoward/macos-speech-fieldnotes/stargazers "查看在 GitHub 上给本仓库点过 Star 的读者")
+<p align="center">
+  <a href="./README.md" lang="en">English</a> · 简体中文<br>
+  作者 <a href="https://github.com/kinoward">Kino Ward (@kinoward)</a> ·
+  <a href="https://github.com/kinoward/macos-speech-fieldnotes/stargazers"><img src="https://img.shields.io/github/stars/kinoward/macos-speech-fieldnotes?style=flat&amp;label=Stars" alt="GitHub Star 数量"></a>
+</p>
 
-**技术标签** `macOS` · `Swift` · `端侧语音识别` · `FFmpeg` · `实时翻译`
+<p align="center"><code>macOS</code> <code>Apple silicon</code> <code>Swift</code> <code>端侧语音识别</code> <code>视频字幕</code> <code>流式翻译</code></p>
 
-> **技术笔记定稿 · 2026-11-18**
->
-> 本仓库记录了在 macOS 上进行本地普通话识别的技术选型与实验经验。视频字幕和实时中译英各附一个最小示例，仅供学习和复现。笔记已定稿，仓库后续不再更新。文中的 macOS 与 SDK 版本、接口行为和实测耗时，均以定稿日期为时间基准。[查看定稿时的示例源码](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+<p align="center">
+  <a href="#沿着音频看架构">架构与技术栈</a> ·
+  <a href="#运行任一-demo">运行示例</a>
+</p>
 
-怎样把普通话变成让人读得明白的字幕？这份手册沿着同一个端侧识别器走两条路。处理视频时，可以先校对时间轴，再把文字烧进画面。面对实时麦克风，识别器还在改字，观众已经需要看到原文和译文。
+> **2026-11-18 定稿**。两个示例仅供学习和复现，仓库后续不再更新。文中的 macOS 与 SDK 版本、接口行为和实测耗时，均以这一天为时间基准。[查看定稿时的示例源码](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
 
-<picture>
-  <source media="(max-width: 600px)" srcset="docs/assets/preview-mobile.png">
-  <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/preview.png">
-  <img src="docs/assets/preview.gif" width="1120" alt="同一句普通话在左侧烧录进夜空画面，在右侧逐步译为英文。定稿为「夜空中有一颗星星」。">
-</picture>
-
-*流程示意。左侧是校对后的视频字幕，右侧展示中文草稿补全、英文逐步定稿。* [查看静态图](docs/assets/preview.png)
+<p align="center">
+  <picture>
+    <source media="(max-width: 600px)" srcset="docs/assets/preview-mobile.png">
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/assets/preview.png">
+    <img src="docs/assets/preview.gif" width="1120" alt="同一句普通话在左侧烧录进夜空画面，在右侧逐步译为英文。定稿为「夜空中有一颗星星」。">
+  </picture>
+</p>
+<p align="center"><em>同一句话的两种呈现。左侧是校对后的视频字幕，右侧是实时识别草稿和最终译文。</em> · <a href="docs/assets/preview.png">查看静态图</a></p>
 
 ## 沿着音频看架构
 
