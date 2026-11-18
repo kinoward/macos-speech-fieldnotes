@@ -2,6 +2,10 @@
 
 English · [简体中文](./README.zh-CN.md)
 
+> **Final snapshot · 2026-11-18**
+>
+> This repository preserves what we learned about on-device Mandarin speech recognition on macOS. Its code is for study and reproduction only. Two minimal demos cover video captioning and live Mandarin-to-English translation. The repository will receive no further updates. Use the snapshot date as the reference point for the macOS and SDK versions, API behavior and timings reported here. [Demo source at that date](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+
 How do you turn Mandarin speech into captions that people can actually read? These field notes follow the same on-device recognizer into two settings. With a video file, you can review the timeline before burning in the text. With a live microphone, people need words now, even while the recognizer is still changing its mind.
 
 <picture>
@@ -69,7 +73,7 @@ In the local browser page, click **开始收听** (start), allow the microphone 
 
 ## A result worth reproducing
 
-In the new synthetic sample, the recognizer heard **望远镜** (“telescope”) as **望远近**. The English preview inherited the error. A file user can edit one cue and re-render from the original. A live client needs to replace an earlier translation whenever the underlying words change. The probes show how to observe that difference and how to measure draft latency separately from finalization. [Experiment log](docs/en/experiments.md)
+In the synthetic sample, the recognizer heard **望远镜** (“telescope”) as **望远近**. The English preview inherited the error. A file user can edit one cue and re-render from the original. A live client needs to replace an earlier translation whenever the underlying words change. The probes show how to observe that difference and how to measure draft latency separately from finalization. [Experiment log](docs/en/experiments.md)
 
 The repository contains original code, notes and silent illustrations under [MIT](LICENSE). The sample generator creates audio locally. Model assets, system voices and fonts are supplied by their respective providers. [Data handling and materials](docs/en/architecture.md#data-and-materials)
 
