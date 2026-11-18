@@ -85,8 +85,9 @@ flowchart TD
 用例先把“打开灯”修订成“别打开灯”，再故意送达第一句的英文。旧回复被丢弃、正确译文留在屏幕上，用例才会通过。在仓库根目录运行，只需要 Node.js 22+。
 
 ```bash
-node --test \
-  experiments/revisions.test.mjs
+(cd experiments &&
+  node --test \
+    revisions.test.mjs)
 ```
 
 如果这段示例帮你解决了中文断句或旧译文覆盖的问题，欢迎点个 Star，方便下次查回这段实现。
@@ -96,14 +97,19 @@ node --test \
 在符合上述条件的 Mac 上，从仓库根目录运行以下命令。将 `speech.wav` 换成自己的 16 kHz 单声道 PCM WAV。第一行编译 Swift 工具并准备语言资源，第二行把 JSON 输出到终端。最外层数组按短语分组，每个短语包含若干带时间戳的文本片段。
 
 ```bash
-./demos/video-captions/run --prepare
+./demos/video-captions/run \
+  --prepare
 ./.build/file speech.wav
 ```
 
 在“走廊的灯”合成样例中，第一个片段如下，时间单位为秒。
 
 ```json
-{"start":0,"end":0.24,"text":"我"}
+{
+  "start": 0,
+  "end": 0.24,
+  "text": "我"
+}
 ```
 
 ## 运行任一 Demo
@@ -118,12 +124,13 @@ node --test \
 python3 -m venv .venv
 source .venv/bin/activate
 video=demos/video-captions
-python -m pip install \
-  -r "$video/requirements.txt"
+python -m pip install -r \
+  "$video/requirements.txt"
 "$video/run" --prepare
 ./scripts/make-sample \
   scratch/sky.mp4
-"$video/run" scratch/sky.mp4 \
+"$video/run" \
+  scratch/sky.mp4 \
   scratch/captioned.mp4
 ```
 
@@ -136,9 +143,9 @@ python -m pip install \
 准备 Node.js 22+ 和 npm。首次启动时，脚本会安装锁文件指定的一个依赖。
 
 ```bash
-./demos/live-translation/run \
-  --prepare
-./demos/live-translation/run
+live=demos/live-translation
+"$live/run" --prepare
+"$live/run"
 ```
 
 在本机网页点**开始收听**，允许麦克风并说中文。点**停止收听**后，网页会收完最后一组字幕。在终端按 Ctrl-C 可关闭服务。[实时协议和计时](docs/zh-CN/live-translation.md)

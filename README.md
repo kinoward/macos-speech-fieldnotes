@@ -85,8 +85,9 @@ To reproduce the measurements, start with the file-timing probes and live replay
 The test changes “打开灯” (turn on the light) to “别打开灯” (don’t turn on the light), then delivers the old English reply. It passes when the old reply is ignored and the corrected translation stays on screen. Run from the repository root with Node.js 22+ alone.
 
 ```bash
-node --test \
-  experiments/revisions.test.mjs
+(cd experiments &&
+  node --test \
+    revisions.test.mjs)
 ```
 
 If the example helped you fix a sentence break or a stale translation, a GitHub star makes it easy to find the implementation again.
@@ -96,14 +97,19 @@ If the example helped you fix a sentence break or a stale translation, a GitHub 
 From the repository root on a supported Mac, replace `speech.wav` with your own 16 kHz mono PCM WAV. The first command builds the Swift tool and prepares the language asset. The second writes a JSON array of phrases to standard output. Each phrase contains timed spans.
 
 ```bash
-./demos/video-captions/run --prepare
+./demos/video-captions/run \
+  --prepare
 ./.build/file speech.wav
 ```
 
 The first span of the synthetic hallway-light recording gives the times in seconds.
 
 ```json
-{"start":0,"end":0.24,"text":"我"}
+{
+  "start": 0,
+  "end": 0.24,
+  "text": "我"
+}
 ```
 
 ## Run either demo
@@ -118,12 +124,13 @@ Use Python 3 with Pillow and an FFmpeg installation including `ffprobe`, `libx26
 python3 -m venv .venv
 source .venv/bin/activate
 video=demos/video-captions
-python -m pip install \
-  -r "$video/requirements.txt"
+python -m pip install -r \
+  "$video/requirements.txt"
 "$video/run" --prepare
 ./scripts/make-sample \
   scratch/sky.mp4
-"$video/run" scratch/sky.mp4 \
+"$video/run" \
+  scratch/sky.mp4 \
   scratch/captioned.mp4
 ```
 
@@ -136,9 +143,9 @@ In the **0.80 MB** test export, the captioned file was **769,898 bytes**. All 17
 Install Node.js 22+ with npm. The launcher installs its one locked dependency on first use.
 
 ```bash
-./demos/live-translation/run \
-  --prepare
-./demos/live-translation/run
+live=demos/live-translation
+"$live/run" --prepare
+"$live/run"
 ```
 
 In the local browser page, click **开始收听** (start), allow the microphone and speak Mandarin. Click **停止收听** (stop) to finish the last pair. Press Ctrl-C in the terminal to close the service. [Live protocol and timing](docs/en/live-translation.md)
