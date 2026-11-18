@@ -23,12 +23,21 @@
 </p>
 
 <p align="center">
-  <a href="#沿着音频看架构">架构与技术栈</a> ·
-  <a href="#运行任一-demo">运行示例</a> ·
-  <a href="#star-趋势">Star 趋势</a>
+  <a href="#按问题找方案">按问题找方案</a> ·
+  <a href="#沿着音频看架构">技术架构</a> ·
+  <a href="#运行任一-demo">运行示例</a>
 </p>
 
-> **2026-11-18 定稿**。两个示例仅供学习和复现，仓库后续不再更新。文中的 macOS 与 SDK 版本、接口行为和实测耗时，均以这一天为时间基准。[查看定稿时的示例源码](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+> **2026-11-18 定稿**。笔记和示例均已定稿，后续不再更新。文中的版本和测量结果以这一天为准。[定稿时的示例源码](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+
+## 按问题找方案
+
+- **怎样把普通话 WAV 转成带时间戳的 JSON？** Swift 转写工具会为每段文字标出起止时间，单位为秒。[Swift 转写源码](demos/video-captions/Transcribe.swift)
+- **怎样避免停顿改变译文的意思？** 在“我没有说要……关掉走廊的灯”中间断句，后半句就可能被译成关灯指令。[断句规则](docs/zh-CN/live-translation.md#怎样决定断点) · [回放 700 ms 停顿](docs/zh-CN/experiments.md#复现测量)
+- **怎样防止迟到的旧译文重新上屏？** 中文被修订后，界面先核对英文回复对应的原文版本，再决定是否显示。[显示逻辑](demos/live-translation/public/revisions.js)
+- **怎样确认烧录字幕后音画仍然同步？** 对照原片逐帧检查显示时间，并核对 AAC 音频包的哈希。[媒体检查脚本](experiments/check-media.py) · [验收记录](docs/zh-CN/experiments.md#验收记录)
+
+**运行两个示例需要 Apple 芯片 Mac、macOS 27+ 和 macOS 27+ SDK。** 首次使用需准备普通话识别模型。实时翻译还需下载简体中文和美式英语语言包。[环境准备](docs/zh-CN/architecture.md#准备一台-mac)
 
 <p align="center">
   <picture>
@@ -37,17 +46,15 @@
     <img src="docs/assets/preview.gif" width="1120" alt="同一句普通话在左侧烧录进夜空画面，在右侧逐步译为英文。定稿为「夜空中有一颗星星」。">
   </picture>
 </p>
-<p align="center"><em>同一句话的两种呈现。左侧是校对后的视频字幕，右侧是实时识别草稿和最终译文。</em> · <a href="docs/assets/preview.png">查看静态图</a></p>
+<p align="center"><em>同一句话的两种呈现：校对后烧录进视频的字幕，以及从草稿更新到定稿的实时译文。</em> · <a href="docs/assets/preview.png">查看静态图</a></p>
 
 ## 沿着音频看架构
 
 两个示例共用同一个识别器。处理视频时，可以在导出前改正一个错字。实时翻译时，观众先看到的是草稿，识别器每次修订中文，界面上的译文也要跟着更新。
 
-| 实现路径 | 使用的技术 | 在示例中的作用 |
-| --- | --- | --- |
-| [共享识别器](docs/zh-CN/architecture.md) | Swift · AVFoundation · Apple Speech（`SpeechAnalyzer`、`SpeechTranscriber`） | 把文件或麦克风音频送入端侧模型。文件识别返回带时间信息的文本，流式识别陆续返回草稿与定稿。 |
-| [视频字幕](docs/zh-CN/video-captions.md) | Python · Pillow · FFmpeg / ffprobe · H.265（libx265） | 校对时间轴、绘制字幕并烧录到原视频，复制 AAC 音轨。需要控制文件大小时使用两遍编码。 |
-| [实时翻译](docs/zh-CN/live-translation.md) | JavaScript · Web Audio API（`AudioWorklet`） · Node.js · WebSocket（`ws`） · Apple Translation（`TranslationSession`） | 在本机流式传输单声道 PCM，结合停顿和句意断句，让英文字幕与最新中文保持对应。 |
+- **共享识别器。** Swift 和 AVFoundation 将文件或麦克风音频送入 Apple 的 `SpeechAnalyzer` 和 `SpeechTranscriber`。[音频格式与时钟](docs/zh-CN/architecture.md)
+- **视频字幕。** Python 和 Pillow 绘制校对后的字幕，FFmpeg 通过 libx265 把字幕烧进画面，同时复制 AAC 音轨。有体积预算时采用两遍编码。[视频处理流程](docs/zh-CN/video-captions.md)
+- **实时翻译。** 浏览器的 AudioWorklet 通过本机 WebSocket 把 PCM 音频传给 Node.js。Swift 选择断句位置，再用 Apple 的 `TranslationSession` 翻译修订后的文字。[流式传输协议](docs/zh-CN/live-translation.md)
 
 ```mermaid
 flowchart TD
@@ -73,7 +80,7 @@ flowchart TD
 
 ## 运行任一 Demo
 
-实测环境为 **Apple silicon、macOS 27.3、macOS 27.2 SDK**。两个 Demo 均在本机编译 Swift，使用系统语言资源，无需云端 API 密钥。请先准备普通话语音识别资源。实时翻译还需在**系统设置 → 通用 → 语言与地区 → 翻译语言**下载简体中文和美式英语。[兼容性与语言资源](docs/zh-CN/architecture.md)
+实测环境为 **macOS 27.3 和 macOS 27.2 SDK**。两个 Demo 均在本机编译 Swift，无需云端 API 密钥。
 
 ### 把字幕烧进视频
 
@@ -119,7 +126,10 @@ python -m pip install -r demos/video-captions/requirements.txt
 
 <p align="center">
   <a href="https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&amp;type=date">
-    <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="macOS Speech Field Notes 的 GitHub Star 数量随日期变化的折线图">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left&amp;theme=dark">
+      <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="macOS Speech Field Notes 的 GitHub Star 数量随日期变化的折线图">
+    </picture>
   </a>
 </p>
 

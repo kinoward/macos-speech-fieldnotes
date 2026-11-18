@@ -23,12 +23,21 @@ One on-device Mandarin recognizer powers both video subtitles and live Mandarin-
 </p>
 
 <p align="center">
-  <a href="#how-audio-becomes-captions">Architecture &amp; stack</a> ·
-  <a href="#run-either-demo">Run the demos</a> ·
-  <a href="#star-history">Star history</a>
+  <a href="#find-a-solution">Find a solution</a> ·
+  <a href="#how-audio-becomes-captions">Architecture</a> ·
+  <a href="#run-either-demo">Demos</a>
 </p>
 
-> **Final snapshot · 2026-11-18.** The demos are for study and reproduction only. The repository will receive no further updates. Use this date as the reference for the macOS and SDK versions, API behavior and timings reported here. [Demo source at that date](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+> **Final snapshot · 2026-11-18.** These field notes and demos are complete. No further updates are planned. Versions and measurements refer to this date. [Demo source at that date](https://github.com/kinoward/macos-speech-fieldnotes/tree/1ed1c80effb51ccd5a6cf5bba69ab16531da4ccb/demos)
+
+## Find a solution
+
+- **How do I get timestamped JSON from a Mandarin WAV?** The Swift reader returns text with start and end times in seconds. [Swift transcription code](demos/video-captions/Transcribe.swift)
+- **How do I keep a pause from changing the meaning?** In “我没有说要……关掉走廊的灯” (“I didn’t say to … turn off the hallway light”), a cut after the pause can turn the last words into a command. [Boundary rules](docs/en/live-translation.md#where-to-make-a-cut) · [Replay the 700 ms pause](docs/en/experiments.md#reproduce-the-measurements)
+- **How do I keep an old translation off the screen?** When the Mandarin changes, match the English reply to the current revision before displaying it. [Display logic](demos/live-translation/public/revisions.js)
+- **Did burning subtitles change the timing or audio?** Compare every frame’s presentation time and the AAC packet hashes against the original. [Media checker](experiments/check-media.py) · [Recorded results](docs/en/experiments.md#acceptance-evidence)
+
+**Both demos require an Apple silicon Mac, macOS 27+ and the macOS 27+ SDK.** Prepare the Mandarin speech model once. Live translation also needs the Simplified Chinese and US English language packs. [Setup guide](docs/en/architecture.md#prepare-a-mac)
 
 <p align="center">
   <picture>
@@ -37,17 +46,15 @@ One on-device Mandarin recognizer powers both video subtitles and live Mandarin-
     <img src="docs/assets/preview.gif" width="1120" alt="The same Mandarin sentence burned into a night-sky video and progressively translated into English. Final text: There is a star in the night sky.">
   </picture>
 </p>
-<p align="center"><em>One utterance, illustrated. The reviewed video caption is on the left. The live draft and final translation are on the right.</em> · <a href="docs/assets/preview.png">Still image</a></p>
+<p align="center"><em>The same utterance appears as a reviewed video caption and as a live draft that becomes a final translation.</em> · <a href="docs/assets/preview.png">Still image</a></p>
 
 ## How audio becomes captions
 
 Both demos start with the same recognizer. A video editor can correct a word before export. A live viewer sees a draft first, so the English translation needs to follow revisions to the Mandarin text.
 
-| Path | Technologies | What they do here |
-| --- | --- | --- |
-| [Shared recognizer](docs/en/architecture.md) | Swift · AVFoundation · Apple Speech (`SpeechAnalyzer`, `SpeechTranscriber`) | Feed file or microphone audio to the on-device model. Read timed text from a file or draft and final results from a stream. |
-| [Video captions](docs/en/video-captions.md) | Python · Pillow · FFmpeg / ffprobe · H.265 (libx265) | Review timed cues, draw the text and burn it into the original video. Copy the AAC track and use two-pass encoding for a size budget. |
-| [Live translation](docs/en/live-translation.md) | JavaScript · Web Audio API (`AudioWorklet`) · Node.js · WebSocket (`ws`) · Apple Translation (`TranslationSession`) | Stream mono PCM over a local connection, choose sentence breaks and keep the English caption paired with the latest Mandarin text. |
+- **Shared recognizer.** Swift and AVFoundation feed file or microphone audio to Apple’s `SpeechAnalyzer` and `SpeechTranscriber`. [Audio formats and clocks](docs/en/architecture.md)
+- **Video captions.** Python and Pillow draw the reviewed cues. FFmpeg burns them into the picture with libx265 and copies the AAC track. Two-pass encoding targets a size budget. [Video pipeline](docs/en/video-captions.md)
+- **Live translation.** A browser AudioWorklet sends PCM over a local WebSocket to Node.js. Swift chooses the sentence breaks and uses Apple’s `TranslationSession` to translate each revision. [Streaming protocol](docs/en/live-translation.md)
 
 ```mermaid
 flowchart TD
@@ -73,7 +80,7 @@ To reproduce the measurements, start with the file-timing probes and live replay
 
 ## Run either demo
 
-Tested on **Apple silicon with macOS 27.3 and the macOS 27.2 SDK**. Both demos compile Swift locally and work without a cloud API key. Prepare the Mandarin speech asset once. The live demo also needs the Simplified Chinese and US English translation languages in **System Settings → General → Language & Region → Translation Languages**. [Compatibility and asset setup](docs/en/architecture.md)
+The reference runs used **macOS 27.3 and the macOS 27.2 SDK**. Both demos compile Swift locally and work without a cloud API key.
 
 ### Burn subtitles into a video
 
@@ -119,7 +126,10 @@ Read the commits in chronological order to trace the work from file transcriptio
 
 <p align="center">
   <a href="https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&amp;type=date">
-    <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="GitHub star count for macOS Speech Field Notes by date">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left&amp;theme=dark">
+      <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="GitHub star count for macOS Speech Field Notes by date">
+    </picture>
   </a>
 </p>
 
