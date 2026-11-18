@@ -51,17 +51,29 @@ class CaptionLayout:
         image.save(path)
 
 
-def timed_units(span, layout):
-    text, start, end = span["text"], span["start"], span["end"]
-    if len(layout.lines(text)) <= 2 and end - start <= 6:
-        yield text, start, end
-        return
-    position = 0
-    for unit in UNITS.findall(text):
-        previous = position
-        position += len(unit)
-        yield (unit, start + (end - start) * previous / len(text),
-               start + (end - start) * position / len(text))
+def timed_units(spans):
+    word = ""
+    for span in spans:
+        raw = span["text"]
+        trimmed = raw.strip()
+        text = trimmed if trimmed and all(char in CLOSING for char in trimmed) else raw
+        start, end = span["start"], span["end"]
+        for match in UNITS.finditer(text):
+            unit = match.group()
+            left = start + (end - start) * match.start() / len(text)
+            right = start + (end - start) * match.end() / len(text)
+            if word and unit in CLOSING:
+                word = word.rstrip() + unit
+                word_end = right
+                held_punctuation |= right - left >= 0.55
+            elif word and unit.isspace():
+                word += unit
+            else:
+                if word:
+                    yield word, word_start, word_end, held_punctuation
+                word, word_start, word_end, held_punctuation = unit, left, right, False
+    if word:
+        yield word, word_start, word_end, held_punctuation
 
 
 def make_draft(phrases, layout, offset, duration):
@@ -70,19 +82,16 @@ def make_draft(phrases, layout, offset, duration):
         text = ""
         start = end = 0
         held_punctuation = False
-        for span in spans:
-            for unit, left, right in timed_units(span, layout):
-                boundary = (held_punctuation or left - end >= 0.55 or text.rstrip().endswith(tuple(TERMINAL))
-                            or right - start > 6 or len(layout.lines(text + unit)) > 2)
-                if text.strip() and boundary and unit.strip() and unit.strip() not in CLOSING:
-                    cues.append({"start": start + offset, "end": end + offset, "text": text.strip()})
-                    text = ""
-                if not text:
-                    start = left
-                end = right
-                punctuation = bool(unit.strip()) and all(char in CLOSING for char in unit.strip())
-                text += unit.strip() if punctuation else unit
-                held_punctuation = punctuation and right - left >= 0.55
+        for unit, left, right, held in timed_units(spans):
+            boundary = (held_punctuation or left - end >= 0.55 or text.rstrip().endswith(tuple(TERMINAL))
+                        or right - start > 6 or len(layout.lines(text + unit)) > 2)
+            if text.strip() and boundary:
+                cues.append({"start": start + offset, "end": end + offset, "text": text.strip()})
+                text = ""
+            if not text:
+                start = left
+            end, held_punctuation = right, held
+            text += unit
         if text.strip():
             cues.append({"start": start + offset, "end": end + offset, "text": text.strip()})
 

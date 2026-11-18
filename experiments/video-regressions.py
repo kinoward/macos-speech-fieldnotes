@@ -1,4 +1,4 @@
-"""Check a gap in AAC timestamps, and a deliberately shifted soundtrack."""
+"""Check portrait wrapping, a gap in AAC timestamps, and a deliberately shifted soundtrack."""
 from array import array
 from pathlib import Path
 import subprocess
@@ -10,6 +10,18 @@ ROOT = Path(__file__).resolve().parents[1]
 DEMO = ROOT / "demos/video-captions"
 sys.path.insert(0, str(DEMO))
 from caption import recognition_wav
+from timeline import CaptionLayout, make_draft, plates
+
+
+def check_portrait(directory):
+    text = "今晚我们一起用望远镜仔细观察夜空中那颗非常明亮的星星。"
+    spans = [{"text": char, "start": index * 0.14, "end": (index + 1) * 0.14}
+             for index, char in enumerate(text)]
+    layout = CaptionLayout(1080, 1920, None)
+    cues = make_draft([spans], layout, 0, 5)
+    assert "".join(cue["text"] for cue in cues) == text
+    assert all(cue["text"] != "。" for cue in cues)
+    plates(cues, layout, 5, directory)
 
 
 def check_soundtrack(directory):
@@ -43,5 +55,6 @@ def check_soundtrack(directory):
 if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as folder:
         directory = Path(folder)
+        check_portrait(directory)
         check_soundtrack(directory)
-    print("OK: AAC timestamp gap and shifted-audio control")
+    print("OK: portrait cue bounds, AAC timestamp gap and shifted-audio control")
