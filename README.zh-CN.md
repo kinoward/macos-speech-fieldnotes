@@ -108,7 +108,7 @@ python -m pip install -r demos/video-captions/requirements.txt
 ## 贡献者
 
 <p>
-  <a href="https://github.com/kinoward"><img src="https://github.com/kinoward.png?size=96" width="48" height="48" alt=""><br><strong>Kino Ward (@kinoward)</strong></a>
+  <img src="https://github.com/kinoward.png?size=96" width="40" height="40" align="middle" alt=""> &nbsp;<strong>Kino Ward</strong> · <a href="https://github.com/kinoward">@kinoward</a>
 </p>
 
 ## 如何阅读提交历史
