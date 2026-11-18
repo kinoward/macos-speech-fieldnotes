@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+root=$(cd "$(dirname "$0")/../.." && pwd)
+case "${1:-}" in
+  --prepare|--check)
+    if [[ $# != 1 ]]; then echo 'Pass --prepare or --check alone.' >&2; exit 2; fi
+    bridge=$("$root/scripts/build-swift" file)
+    exec "$bridge" "$1" ;;
+esac
+python="${PYTHON:-python3}"
+exec "$python" "$root/demos/video-captions/caption.py" "$@"
