@@ -1,0 +1,28 @@
+#!/bin/bash
+set -euo pipefail
+root=$(cd "$(dirname "$0")/.." && pwd)
+case "$1" in
+  file) source_file="$root/demos/video-captions/Transcribe.swift" ;;
+  *) exit 2 ;;
+esac
+if [[ $(uname -s) != Darwin || $(uname -m) != arm64 ]]; then
+  echo 'Use an Apple silicon Mac with macOS 27 or later.' >&2
+  exit 1
+fi
+system_version=$(sw_vers -productVersion)
+sdk_version=$(xcrun --sdk macosx --show-sdk-version)
+if (( ${system_version%%.*} < 27 || ${sdk_version%%.*} < 27 )); then
+  echo 'macOS 27+ and a macOS 27+ SDK are required for this tested route.' >&2
+  exit 1
+fi
+mkdir -p "$root/.build"
+binary="$root/.build/$1"
+shared="$root/shared/MandarinSpeech.swift"
+if [[ ! -x "$binary" || "$source_file" -nt "$binary" || "$shared" -nt "$binary" || "$0" -nt "$binary" ]]; then
+  temp=$(mktemp -d "$root/.build/compile.XXXXXX")
+  trap 'rm -rf "$temp"' EXIT
+  xcrun --sdk macosx swiftc -O -swift-version 6 -parse-as-library -target arm64-apple-macosx27.0 \
+    "$shared" "$source_file" -o "$temp/$1"
+  mv -f "$temp/$1" "$binary"
+fi
+printf '%s\n' "$binary"
