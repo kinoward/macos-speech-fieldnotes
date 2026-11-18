@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+if [[ $# != 1 || "$1" == "--help" ]]; then
+  echo 'Usage: scripts/make-sample OUTPUT.mp4'
+  echo 'Creates a local-only Mandarin test video using macOS say and FFmpeg.'
+  exit $(( $# != 1 ))
+fi
+output=$1
+if [[ -e "$output" ]]; then echo 'Output already exists.' >&2; exit 1; fi
+mkdir -p "$(dirname "$output")"
+job=$(mktemp -d "$(dirname "$output")/.sample.XXXXXX")
+trap 'rm -rf "$job"' EXIT
+say -v "${VOICE:-Tingting}" -r 175 -o "$job/voice.aiff" \
+  '夜空中有一颗星星。[[slnc 500]] 我们可以用望远镜观察月亮。'
+duration=$(ffprobe -v error -show_entries format=duration -of default=nw=1:nk=1 "$job/voice.aiff" |
+  LC_ALL=C awk '{printf "%.6f", $1 + 0.6}')
+ffmpeg -hide_banner -loglevel error -nostdin -f lavfi -i "testsrc2=size=960x540:rate=30000/1001:duration=$duration" \
+  -i "$job/voice.aiff" -map 0:v -map 1:a -af 'apad=pad_dur=0.6' \
+  -c:v libx264 -preset veryfast -crf 24 -pix_fmt yuv420p -c:a aac -ar 48000 -ac 2 \
+  -map_metadata -1 -movflags +faststart "$job/sample.mp4"
+ln "$job/sample.mp4" "$output"
+printf 'Created %s for local testing.\n' "$output"
