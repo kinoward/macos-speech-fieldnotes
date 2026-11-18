@@ -15,6 +15,8 @@ speak negation '我没有说要[[slnc 700]]关掉走廊的灯。'
 speak condition '如果窗户开着[[slnc 620]]我们就能听见雨声。'
 speak noun '请记下天空中[[slnc 430]]的第一颗星星。'
 speak independent '晚霞已经消失[[slnc 500]]街灯刚刚亮起。'
+speak mixed-condition '晚霞已经消失[[slnc 490]]如果窗户开着[[slnc 620]]我们就能听见雨声。'
+speak pronoun-condition '如果我们明天改变计划[[slnc 520]]比赛的时间就要推迟。'
 ffmpeg -v error -nostdin -i "$directory/condition.wav" -af volume=-24dB "$directory/quiet.wav"
 ffmpeg -v error -nostdin -i "$directory/condition.wav" \
   -f lavfi -i 'anoisesrc=color=pink:amplitude=0.012:sample_rate=16000:seed=42' \

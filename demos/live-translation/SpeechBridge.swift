@@ -269,7 +269,7 @@ private enum FinalizationPolicy {
     private static let dependentOpeners = ["如果", "假如", "要是", "只要", "除非", "因为", "虽然", "当", "等到", "为了", "关于"]
     private static let softUnfinishedCharacters = Set("这那每本该此的地得")
     private static let softUnfinishedWords = ["打开", "关闭", "保存", "检查", "更新", "刷新", "选择", "设置", "修改", "调整", "确认"]
-    private static let dependentMainClauseMarkers = ["可以", "应该", "就", "那么", "则", "请", "我们", "我会", "你可以", "您可以"]
+    private static let dependentMainClauseMarkers = ["那么", "那就", "所以", "因此"]
     private static let softContinuationOpeners = [
         "的", "地", "得", "着", "了", "过", "要", "也", "又", "还", "才", "就", "会", "能", "可以", "份", "个", "张", "页", "项", "种", "台", "件",
         "不能", "不会", "不是", "并", "而", "和", "与", "或", "但", "但是", "却", "把", "被", "给",
@@ -395,15 +395,6 @@ private actor Captions {
         return nil
     }
 
-    private func validSoftOffset(_ offset: Int, in text: String) -> Bool {
-        guard offset > 0, offset < text.count else { return false }
-        let boundary = text.index(text.startIndex, offsetBy: offset)
-        return FinalizationPolicy.allowsSoftBoundary(
-            left: String(text[..<boundary]),
-            right: String(text[boundary...])
-        )
-    }
-
     private func softOffsets(in text: String, timing: ResultTiming, final: Bool) -> Set<Int> {
         guard final else { return [] }
         var offsets = Set<Int>()
@@ -411,10 +402,16 @@ private actor Captions {
             $0.boundary >= timing.start - 0.05 && $0.boundary <= timing.end + 0.30
         }
 
+        var sectionStart = text.startIndex
         for observation in observations {
-            if let offset = timedOffset(for: observation.boundary, in: text, timing: timing),
-               validSoftOffset(offset, in: text) {
+            guard let offset = timedOffset(for: observation.boundary, in: text, timing: timing),
+                  offset > 0, offset < text.count else { continue }
+            let boundary = text.index(text.startIndex, offsetBy: offset)
+            guard boundary > sectionStart,
+                  let left = CaptionSections.split(String(text[sectionStart..<boundary])).last else { continue }
+            if FinalizationPolicy.allowsSoftBoundary(left: left, right: String(text[boundary...])) {
                 offsets.insert(offset)
+                sectionStart = boundary
             }
         }
         return offsets
