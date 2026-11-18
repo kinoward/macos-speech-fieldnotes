@@ -77,6 +77,6 @@ In the synthetic sample, the recognizer heard **望远镜** (“telescope”) as
 
 The repository contains original code, notes and silent illustrations under [MIT](LICENSE). The sample generator creates audio locally. Model assets, system voices and fonts are supplied by their respective providers. [Data handling and materials](docs/en/architecture.md#data-and-materials)
 
-## Contributing
+## Reading the commit history
 
-Follow Conventional Commits 1.0.0. Give each logical change its own commit, for example `fix(live): keep timed commas with their preceding clause`. When behavior changes, use the body to explain what prompted the change and how you checked it. The project history follows the file recognizer through video captioning, live translation and the segmentation experiments. [Commit specification](https://www.conventionalcommits.org/en/v1.0.0/) · [Project history](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
+Read the commits in chronological order to trace the work from file transcription through video captioning, live translation and sentence segmentation. The history follows Conventional Commits 1.0.0, with one logical change per commit. For example, `fix(live): keep timed commas with their preceding clause` records a specific segmentation decision. The commit body explains the reason for the change and how it was checked. [Commit specification](https://www.conventionalcommits.org/en/v1.0.0/) · [Project history](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)

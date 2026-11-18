@@ -77,6 +77,6 @@ python -m pip install -r demos/video-captions/requirements.txt
 
 原创代码、笔记与静音插图使用 [MIT 许可](LICENSE)。示例音频在使用者本机生成。模型、系统音色和字体由各自的提供方供应。[数据流与素材说明](docs/zh-CN/architecture.md#数据与素材)
 
-## 参与贡献
+## 如何阅读提交历史
 
-提交请遵守 Conventional Commits 1.0.0。每次提交聚焦一项改动，例如 `fix(live): keep timed commas with their preceding clause`。如果改动影响行为，请在提交正文中解释为什么要改，以及如何验证。沿提交历史可以依次了解文件识别、视频字幕、实时翻译和断句实验。[提交规范](https://www.conventionalcommits.org/zh-hans/v1.0.0/) · [项目提交历史](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
+按时间顺序阅读提交，可以看到实验怎样从文件识别发展到视频字幕、实时翻译和断句。提交历史遵循 Conventional Commits 1.0.0，每次提交聚焦一项改动。例如，`fix(live): keep timed commas with their preceding clause` 记录了逗号应归入前一分句的决定，提交正文说明了原因和验证方法。[提交规范](https://www.conventionalcommits.org/zh-hans/v1.0.0/) · [项目提交历史](https://github.com/kinoward/macos-speech-fieldnotes/commits/main/)
