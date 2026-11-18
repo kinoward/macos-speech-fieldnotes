@@ -3,6 +3,7 @@ set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd)
 case "$1" in
   file) source_file="$root/demos/video-captions/Transcribe.swift" ;;
+  live) source_file="$root/demos/live-translation/SpeechBridge.swift" ;;
   *) exit 2 ;;
 esac
 if [[ $(uname -s) != Darwin || $(uname -m) != arm64 ]]; then
