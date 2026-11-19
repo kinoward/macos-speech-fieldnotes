@@ -168,14 +168,11 @@ live=demos/live-translation
 
 <p align="center">
   <a href="https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&amp;type=date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left&amp;theme=dark">
-      <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="macOS Speech Field Notes 的 GitHub Star 数量随日期变化的折线图">
-    </picture>
+    <img src="docs/assets/star-history.svg" width="680" alt="macOS Speech Field Notes 按日期累计收到的 GitHub Star 数量">
   </a>
 </p>
 
-页首徽章显示当前 Star 数量，这张图按日期展示变化。有多个日期的数据点后才会形成折线。[查看交互图表](https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&type=date)
+图中按日期显示累计收到的 Star 数量。页首徽章显示当前的 Star 数量。[查看交互图表](https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&type=date)
 
 ## 开源协议
 

@@ -168,14 +168,11 @@ Read the commits in chronological order to trace the work from file transcriptio
 
 <p align="center">
   <a href="https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&amp;type=date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left&amp;theme=dark">
-      <img src="https://api.star-history.com/chart?repos=kinoward/macos-speech-fieldnotes&amp;type=date&amp;legend=top-left" width="680" alt="GitHub star count for macOS Speech Field Notes by date">
-    </picture>
+    <img src="docs/assets/star-history.svg" width="680" alt="Cumulative GitHub stars received by macOS Speech Field Notes, by date">
   </a>
 </p>
 
-The badge at the top shows the current count. The chart plots stars by date, so a line appears once there are points on more than one date. [Explore the interactive chart](https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&type=date)
+The chart shows cumulative stars received by date. The badge at the top shows the current count. [Explore the interactive chart](https://www.star-history.com/?repos=kinoward%2Fmacos-speech-fieldnotes&type=date)
 
 ## License
 
